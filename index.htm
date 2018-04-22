@@ -1,0 +1,340 @@
+<html>
+
+<head>
+    <title>
+
+        Card Designer
+
+    </title>
+
+
+    <style type='text/css'>
+        #overlay {
+
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.4);
+            z-index: 1;
+
+            overflow: auto;
+            display: none;
+            text-align: center;
+        }
+
+
+        #canvascontain {
+
+            margin: 0 auto;
+            position: relative;
+            top: 100px;
+            left: 40%;
+            text-align: center;
+
+        }
+
+
+        #topbar {
+
+
+            padding: 20px;
+
+            position: relative;
+            top: 20px;
+            margin: 0 auto;
+
+            text-align: center;
+
+            background-color: aliceblue;
+
+        }
+
+        .theforms {
+
+            display: none;
+            position: relative;
+            top: 15%;
+            width: 30%;
+
+            background: #fff;
+            padding: 100px;
+            margin: 0 auto;
+
+        }
+
+        button {
+
+            background: rgb(37, 196, 37);
+            color: white;
+            padding: 7px;
+            border-radius: 1px;
+            font-weight: bold;
+            white-space: nowrap;
+        }</style>
+
+
+
+
+
+</head>
+
+
+<body style='overflow:hidden'>
+
+
+
+
+    <div id='overlay'>
+
+
+
+
+
+
+        <form class='theforms'>
+
+            <h4>Add Text</h4>
+
+            <textarea id='otxt' rows='20' cols='40'> Type here.. </textarea>
+            <br/>
+            <br/>
+            <button id='addtxt'>Save Text</button>
+
+        </form>
+
+
+
+
+
+        <form class='theforms'>
+
+            <h4>Add an Image</h4>
+
+            <input type='text' id='ourl' />
+            <button id='addurl'>Save Image</button>
+
+        </form>
+
+
+
+
+
+
+
+        <form class='theforms'>
+            <h4>Change Background</h4>
+
+            <input type='text' id='obg' />
+            <button id='addbg'>Change</button>
+
+        </form>
+
+
+
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+    <div id='topbar'>
+
+
+        <button id='del'>Remove </button>
+    </div>
+
+    <button id='txt'>Add Text </button>
+    </div>
+
+
+    <button id='img'>Add Image </button>
+    </div>
+    <button id='bg'>Change Background </button>
+    </div>
+
+
+
+
+
+
+
+
+    <div id='canvascontain'>
+        <canvas id="canvas" width="400" height="500"></canvas>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/2.2.3/fabric.min.js"></script>
+    <script>
+
+        //show theforms
+
+        document.getElementById('txt').onclick = function () {
+
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementsByClassName('theforms')[0].style.display = 'block'
+        }
+
+        document.getElementById('img').onclick = function () {
+
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementsByClassName('theforms')[1].style.display = 'block'
+        }
+
+
+        document.getElementById('bg').onclick = function () {
+
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementsByClassName('theforms')[2].style.display = 'block'
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        var canvas = new fabric.Canvas('canvas', {
+
+
+            backgroundColor: '#f3f3f3',
+            selectionColor: 'blue',
+            selectionLineWidth: 2
+
+        })
+
+        var rect = new fabric.Rect({
+            top: 100,
+            left: 100,
+            width: 60,
+            height: 70,
+            fill: 'red'
+        });
+
+        canvas.add(rect);
+
+
+
+
+
+
+        //add txt
+
+        document.getElementById('addtxt').onclick = function () {
+
+            var filled = document.getElementById('otxt').value;
+            var text = new fabric.Text(filled, { left: 100, top: 100 });
+            canvas.add(text);
+
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementsByClassName('theforms')[0].style.display = 'none'
+
+
+            return false;
+
+
+        }
+
+
+
+
+
+
+
+
+        //add an image from url
+        document.getElementById('addurl').onclick = function () {
+            document.getElementById('addurl').innerText = 'Please wait';
+            var ourl = document.getElementById('ourl');
+
+            fabric.Image.fromURL(ourl.value, function (img) {
+
+                // add filter
+                // add image onto canvas (it also re-render the canvas)
+
+
+                canvas.add(img);
+
+                document.getElementById('overlay').style.display = 'none';
+                document.getElementsByClassName('theforms')[1].style.display = 'none'
+                document.getElementById('addurl').innerText = 'Save Image';
+
+
+
+
+            });
+
+            return false;
+
+
+
+        }
+
+
+
+        //remove object
+        document.getElementById('del').onclick = function () {
+
+
+            canvas.remove(canvas.getActiveObject());
+
+
+
+        }
+
+
+
+
+
+        //remove background image
+        document.getElementById('addbg').onclick = function () {
+
+            canvas.setBackgroundImage(document.getElementById('obg').value)
+
+            document.getElementsByClassName('theforms')[2].style.display = 'none'
+            document.getElementById('overlay').style.display = 'none';
+
+
+            return false;
+
+
+        }
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>
