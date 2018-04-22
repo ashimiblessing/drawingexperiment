@@ -9,6 +9,14 @@
 
 
     <style type='text/css'>
+	
+	
+	body{
+	
+	
+	text-align:center;
+	}
+	
         #overlay {
 
             position: fixed;
@@ -35,6 +43,17 @@
 
         }
 
+		canvas{
+		
+		border:1px solid red;
+		}
+		
+		
+		
+		
+		
+		
+		
 
         #topbar {
 
@@ -50,6 +69,25 @@
             background-color: aliceblue;
 
         }
+		
+		#topbar > a {
+		
+	 
+		text-decoration:none;
+		  background: rgb(37, 196, 37);
+            color: white;
+            padding: 7px;
+            border-radius: 1px;
+            font-weight: bold;
+            white-space: nowrap;
+			
+			margin-left: 5px;
+			margin-right:5px;
+		
+		}
+		
+		
+		
 
         .theforms {
 
@@ -59,7 +97,7 @@
             width: 30%;
 
             background: #fff;
-            padding: 100px;
+            padding: 50px;
             margin: 0 auto;
 
         }
@@ -72,7 +110,31 @@
             border-radius: 1px;
             font-weight: bold;
             white-space: nowrap;
-        }</style>
+        }
+		
+		
+		
+		#filename{
+		
+		margin:0 auto;
+		position:relative;
+		width:200px;
+		color:#333;
+	 
+		 
+		}
+		
+		
+		.cleartop{
+		
+		clear:both;
+		position:relative;
+		top:50px;
+		
+		}
+		
+		
+		</style>
 
 
 
@@ -97,7 +159,7 @@
 
             <h4>Add Text</h4>
 
-            <textarea id='otxt' rows='20' cols='40'> Type here.. </textarea>
+            <textarea id='otxt' rows='12' cols='35'> Type here.. </textarea>
             <br/>
             <br/>
             <button id='addtxt'>Save Text</button>
@@ -128,12 +190,21 @@
 
             <input type='text' id='obg' />
             <button id='addbg'>Change</button>
+			
+			
 
         </form>
 
 
 
 
+
+        <form class='theforms'>
+            <h4>Saving your work..</h4>
+<br/>
+         <img src='spinner.gif' width='200' />
+
+        </form>
 
 
 
@@ -152,19 +223,26 @@
     <div id='topbar'>
 
 
-        <button id='del'>Remove </button>
+        <a href='#' id='del'>Remove </a>
+     
+
+    <a href='#' id='txt'>Add Text </a>
+     
+
+
+    <a href='#' id='img'>Add Image </a>
+     
+    <a href='#' id='bg'>Change Background </a>
+	
+	  <a href='#' id='savetemp'>Save Template</a>
+	  
+	  
+	
     </div>
 
-    <button id='txt'>Add Text </button>
-    </div>
-
-
-    <button id='img'>Add Image </button>
-    </div>
-    <button id='bg'>Change Background </button>
-    </div>
-
-
+<div class='cleartop'>
+<input type='text' id='filename'  placeholder='filename'/>
+</div>
 
 
 
@@ -172,7 +250,10 @@
 
 
     <div id='canvascontain'>
-        <canvas id="canvas" width="400" height="500"></canvas>
+	
+
+ 
+        <canvas id="canvas" width="400" height="500"></canvas>	
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/2.2.3/fabric.min.js"></script>
     <script>
@@ -198,6 +279,32 @@
             document.getElementsByClassName('theforms')[2].style.display = 'block'
         }
 
+//save the template
+   document.getElementById('savetemp').onclick = function () {
+
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementsByClassName('theforms')[3].style.display = 'block'
+			
+			var filed=canvas.toSVG();
+			
+			if (filed != '')
+			
+			{ 
+			
+			setTimeout( function(){
+			
+			
+			
+			console.log(filed);
+			     document.getElementById('overlay').style.display = 'none';
+            document.getElementsByClassName('theforms')[3].style.display = 'none';
+			
+			
+			}, 3000)
+			
+			
+			}
+        }
 
 
 
