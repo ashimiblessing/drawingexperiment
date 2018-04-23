@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -133,6 +134,24 @@
 		
 		}
 		
+
+
+        #textControls{
+
+position: relative;
+top:10px;
+
+
+        }
+
+
+
+        .controltxt{
+
+max-width:100px;
+
+
+        }
 		
 		</style>
 
@@ -155,7 +174,7 @@
 
 
 
-        <form class='theforms'>
+        <form class='theforms' enctype="multipart/form-data">
 
             <h4>Add Text</h4>
 
@@ -173,9 +192,11 @@
         <form class='theforms'>
 
             <h4>Add an Image</h4>
-
-            <input type='text' id='ourl' />
-            <button id='addurl'>Save Image</button>
+             
+                
+                <input type="file" id="file" />
+           
+           
 
         </form>
 
@@ -188,9 +209,8 @@
         <form class='theforms'>
             <h4>Change Background</h4>
 
-            <input type='text' id='obg' />
-            <button id='addbg'>Change</button>
-			
+            <input type="file" id="file2" />
+            
 			
 
         </form>
@@ -203,6 +223,10 @@
             <h4>Saving your work..</h4>
 <br/>
          <img src='spinner.gif' width='200' />
+         <br/>
+
+<span id='message'>...</span>
+
 
         </form>
 
@@ -233,12 +257,79 @@
     <a href='#' id='img'>Add Image </a>
      
     <a href='#' id='bg'>Change Background </a>
+
+
+
+    <a onclick="sendSelectedObjectToFront()" title="Bring selected to front">
+        <span class=""> To Front</span>
+    </a>
+    <a onclick="sendSelectedObjectBack()" title="Send selected to back">
+        <span class="">To Back</span>
+    </a>
+
+
+
+    <a onclick="refresh()" title="Start fresh">
+        <span class=""> Clear All</span>
+    </a>
+
 	
 	  <a href='#' id='savetemp'>Save Template</a>
 	  
 	  
 	
     </div>
+
+
+ <br/>
+
+
+    <div id="textControls" style='' hidden>
+        <div id="text-wrapper" data-ng-show="getText()">
+            <div id="text-controls">
+                <select id="font-family">
+                    <option value="arial">Arial</option>
+                    <option value="HelveticaNeue" selected>Helvetica Neue</option>
+                    <option value="myriad pro">Myriad Pro</option>
+                    <option value="delicious">Delicious</option>
+                    <option value="verdana">Verdana</option>
+                    <option value="Georgia">Georgia</option>
+                    <option value="courier">Courier</option>
+                    <option value="comic sans ms">Comic Sans MS</option>
+                    <option value="impact">Impact</option>
+                    <option value="monaco">Monaco</option>
+                    <option value="optima">Optima</option>
+                    <option value="hoefler text">Hoefler Text</option>
+                    <option value="Open Sans">Open Sans</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                </select>
+                <input type="color" id="text-color" size="10">
+              
+                <label for="text-stroke-color"  >Stroke C:</label>
+                <input type="color" id="text-stroke-color" class='controltxt'>
+                <label for="text-stroke-width">Stroke W:</label>
+                <input type="number" value="1" min="1" max="5" id="text-stroke-width" class='controltxt'>
+                <label for="text-font-size">Font S:</label>
+                <input type="number" min="12" max="120" step="1" id="text-font-size" class='controltxt'>
+                <label for="text-line-height">Line H:</label>
+                <input type="number" min="0" max="10" step="0.1" id="text-line-height" class='controltxt'>
+                <label for="text-bg-color">BG Color:</label>
+                <input type="color" id="text-bg-color" size="10" class='controltxt'>
+                <label for="text-lines-bg-color">BG Text Color:</label>
+                <input type="color" id="text-lines-bg-color" size="10" class='controltxt'>
+                <input type='checkbox' name='fonttype' id="text-cmd-bold" class='controltxt'>
+                <b>B</b>
+                <input type='checkbox' name='fonttype' id="text-cmd-italic" class='controltxt'>
+                <em>I</em>
+                <input type='checkbox' name='fonttype' id="text-cmd-underline" class='controltxt'> Underline
+                <input type='checkbox' name='fonttype' id="text-cmd-linethrough" class='controltxt'> Linethrough
+                <input type='checkbox' name='fonttype' id="text-cmd-overline" class='controltxt'> Overline
+            </div>
+        </div>
+    </div>
+
+
+
 
 <div class='cleartop'>
 <input type='text' id='filename'  placeholder='filename'/>
@@ -257,6 +348,34 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/2.2.3/fabric.min.js"></script>
     <script>
+
+
+//initialize canvas
+    var canvas = new fabric.Canvas('canvas', {
+
+
+backgroundColor: '#f3f3f3',
+selectionColor: '#fefefe',
+selectionLineWidth: 2
+
+})
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         //show theforms
 
@@ -291,18 +410,58 @@
 			
 			{ 
 			
+var fname=document.getElementById('filename').value;
+
+
+
+var http = new XMLHttpRequest();
+var url = "http://dev.opengift.com.ng/api/savetemplate.php";
+var params = "filename="+fname+'&file='+filed;
+http.open("POST", url, true);
+
+//Send the proper header information along with the request
+http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+http.onreadystatechange = function() {//Call a function when the state changes.
+    if(http.readyState == 4 && http.status == 200) {
+     
+
+
+
+
+
+
+
+
+//show them the done! message, and make sure they see it for two seconds
+
 			setTimeout( function(){
 			
+
 			
 			
-			console.log(filed);
-			     document.getElementById('overlay').style.display = 'none';
-            document.getElementsByClassName('theforms')[3].style.display = 'none';
-			
-			
-			}, 3000)
-			
-			
+		 
+            document.getElementById('overlay').style.display = 'none';
+       document.getElementsByClassName('theforms')[3].style.display = 'none';
+       
+       document.getElementById('message').innerHTML='Saved!';
+       }, 2000)
+       
+       
+       document.getElementById('message').innerHTML='...';
+
+
+
+
+
+    }
+}
+http.send(params);
+
+
+
+
+
 			}
         }
 
@@ -330,24 +489,180 @@
 
 
 
-        var canvas = new fabric.Canvas('canvas', {
+    
 
 
-            backgroundColor: '#f3f3f3',
-            selectionColor: 'blue',
-            selectionLineWidth: 2
 
-        })
 
-        var rect = new fabric.Rect({
-            top: 100,
-            left: 100,
-            width: 60,
-            height: 70,
-            fill: 'red'
-        });
 
-        canvas.add(rect);
+
+
+
+
+
+
+
+
+
+//text controls
+canvas.on('object:selected', function(e) {
+   if (e.target.type === 'i-text') {
+      document.getElementById('textControls').hidden = false;
+   }
+});
+canvas.on('before:selection:cleared', function(e) {
+   if (e.target.type === 'i-text') {
+      document.getElementById('textControls').hidden = true;
+   }
+});
+
+
+
+document.getElementById('file').addEventListener("change", function(e) {
+   var file = e.target.files[0];
+   var reader = new FileReader();
+   reader.onload = function(f) {
+      var data = f.target.result;
+      fabric.Image.fromURL(data, function(img) {
+         var oImg = img.set({
+            left: 0,
+            top: 0,
+            angle: 0,
+            border: '#000',
+            stroke: '#F0F0F0', //<-- set this
+            strokeWidth: 40 //<-- set this
+         }).scale(0.2);
+         canvas.add(oImg).renderAll();
+         //var a = canvas.setActiveObject(oImg);
+         var dataURL = canvas.toDataURL({
+            format: 'png',
+            quality: 1
+         });
+      });
+   };
+   reader.readAsDataURL(file);
+
+
+
+   document.getElementById('overlay').style.display = 'none';
+            document.getElementsByClassName('theforms')[1].style.display = 'none'
+
+
+
+
+});
+
+
+document.getElementById('file2').addEventListener("change", function(e) {
+   var file = e.target.files[0];
+   var reader = new FileReader();
+   reader.onload = function(f) {
+      var data = f.target.result;
+      fabric.Image.fromURL(data, function(img) {
+         // add background image
+         canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
+            scaleX: canvas.width / img.width,
+            scaleY: canvas.height / img.height
+         });
+      });
+   };
+   reader.readAsDataURL(file);
+
+
+
+ document.getElementById('overlay').style.display = 'none';
+            document.getElementsByClassName('theforms')[2].style.display = 'none'
+
+
+});
+
+
+
+
+
+ 
+ 
+// Edit Text
+ 
+document.getElementById('text-color').onchange = function() {
+   canvas.getActiveObject().set('fill',this.value);
+   canvas.renderAll();
+};
+document.getElementById('text-bg-color').onchange = function() {
+   canvas.getActiveObject().set('backgroundColor',this.value);
+   canvas.renderAll();
+};
+document.getElementById('text-lines-bg-color').onchange = function() {
+   canvas.getActiveObject().set('textBackgroundColor',this.value);
+   canvas.renderAll();
+};
+document.getElementById('text-stroke-color').onchange = function() {
+   canvas.getActiveObject().set('stroke',this.value);
+   canvas.renderAll();
+};
+document.getElementById('text-stroke-width').onchange = function() {
+   canvas.getActiveObject().set('strokeWidth',this.value);
+   canvas.renderAll();
+};
+document.getElementById('font-family').onchange = function() {
+   canvas.getActiveObject().set('fontFamily',this.value);
+   canvas.renderAll();
+};
+document.getElementById('text-font-size').onchange = function() {
+   canvas.getActiveObject().set('fontSize',this.value);
+   canvas.renderAll();
+};
+document.getElementById('text-line-height').onchange = function() {
+   canvas.getActiveObject().set('lineHeight',this.value);
+   canvas.renderAll();
+};
+ 
+
+
+ 
+ 
+
+
+
+
+// Send selected object to front or back
+var selectedObject;
+canvas.on('object:selected', function(event) {
+   selectedObject = event.target;
+});
+
+
+  function sendSelectedObjectBack () {
+   canvas.sendToBack(selectedObject);
+}
+  function sendSelectedObjectToFront () {
+      canvas.bringToFront(selectedObject);
+   }
+
+
+ 
+// Do some initializing stuff
+fabric.Object.prototype.set({
+   transparentCorners: true,
+   cornerColor: '#22A7F0',
+   borderColor: '#22A7F0',
+   cornerSize: 12,
+   padding: 5
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -359,7 +674,13 @@
         document.getElementById('addtxt').onclick = function () {
 
             var filled = document.getElementById('otxt').value;
-            var text = new fabric.Text(filled, { left: 100, top: 100 });
+            var text = new fabric.IText(filled, { left: 100, top: 100,fontFamily: 'helvetica neue'});
+
+
+ 
+
+
+
             canvas.add(text);
 
             document.getElementById('overlay').style.display = 'none';
@@ -378,33 +699,7 @@
 
 
 
-        //add an image from url
-        document.getElementById('addurl').onclick = function () {
-            document.getElementById('addurl').innerText = 'Please wait';
-            var ourl = document.getElementById('ourl');
-
-            fabric.Image.fromURL(ourl.value, function (img) {
-
-                // add filter
-                // add image onto canvas (it also re-render the canvas)
-
-
-                canvas.add(img);
-
-                document.getElementById('overlay').style.display = 'none';
-                document.getElementsByClassName('theforms')[1].style.display = 'none'
-                document.getElementById('addurl').innerText = 'Save Image';
-
-
-
-
-            });
-
-            return false;
-
-
-
-        }
+      
 
 
 
@@ -421,20 +716,7 @@
 
 
 
-
-        //remove background image
-        document.getElementById('addbg').onclick = function () {
-
-            canvas.setBackgroundImage(document.getElementById('obg').value)
-
-            document.getElementsByClassName('theforms')[2].style.display = 'none'
-            document.getElementById('overlay').style.display = 'none';
-
-
-            return false;
-
-
-        }
+ 
 
 
 
