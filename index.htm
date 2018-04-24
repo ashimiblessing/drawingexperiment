@@ -321,9 +321,7 @@ max-width:100px;
                 <b>B</b>
                 <input type='checkbox' name='fonttype' id="text-cmd-italic" class='controltxt'>
                 <em>I</em>
-                <input type='checkbox' name='fonttype' id="text-cmd-underline" class='controltxt'> Underline
-                <input type='checkbox' name='fonttype' id="text-cmd-linethrough" class='controltxt'> Linethrough
-                <input type='checkbox' name='fonttype' id="text-cmd-overline" class='controltxt'> Overline
+    
             </div>
         </div>
     </div>
@@ -617,6 +615,82 @@ document.getElementById('text-line-height').onchange = function() {
    canvas.renderAll();
 };
  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+radios5 = document.getElementsByName("fonttype"); // wijzig naar button
+for (var i = 0, max = radios5.length; i < max; i++) {
+   radios5[i].onclick = function() {
+      if (document.getElementById(this.id).checked == true) {
+         if (this.id == "text-cmd-bold") {
+            canvas.getActiveObject().set("fontWeight", "bold");
+         }
+         if (this.id == "text-cmd-italic") {
+            canvas.getActiveObject().set("fontStyle", "italic");
+         }
+         if (this.id == "text-cmd-underline") {
+            canvas.getActiveObject().set("textDecoration", "underline");
+         }
+         if (this.id == "text-cmd-linethrough") {
+            canvas.getActiveObject().set("textDecoration", "line-through");
+         }
+         if (this.id == "text-cmd-overline") {
+            canvas.getActiveObject().set("textDecoration", "overline");
+         }
+      } else {
+         if (this.id == "text-cmd-bold") {
+            canvas.getActiveObject().set("fontWeight", "");
+         }
+         if (this.id == "text-cmd-italic") {
+            canvas.getActiveObject().set("fontStyle", "");
+         }
+         if (this.id == "text-cmd-underline") {
+            canvas.getActiveObject().set("textDecoration", "");
+         }
+         if (this.id == "text-cmd-linethrough") {
+            canvas.getActiveObject().set("textDecoration", "");
+         }
+         if (this.id == "text-cmd-overline") {
+            canvas.getActiveObject().set("textDecoration", "");
+         }
+      }
+      canvas.renderAll();
+   }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
  
